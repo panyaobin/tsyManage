@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.tsy.dao.TsyCreaterDao">
+    
+	<sql id="tsyCreaterColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.type AS "type",
+		a.cus_no AS "cusNo",
+		a.cus_model AS "cusModel",
+		a.create_model AS createModel,
+		a.order_sum AS orderSum,
+		a.lot_num AS "lotNum",
+		a.order_date AS "orderDate",
+		a.delive_date AS "deliveDate",
+		a.moulde_flag AS "mouldeFlag",
+		a.looker_flag AS "lookerFlag",
+		a.tester_flag AS "testerFlag",
+		a.cus_require AS "cusRequire",
+		a.is_feed AS "isFeed",
+		a.data_flag AS "dataFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tsyCreaterJoins">
+	</sql>
+    
+	<select id="get" resultType="TsyCreater">
+		SELECT 
+			<include refid="tsyCreaterColumns"/>
+		FROM tsy_creater a
+		<include refid="tsyCreaterJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsyCreater">
+		SELECT 
+			<include refid="tsyCreaterColumns"/>
+		FROM tsy_creater a
+		<include refid="tsyCreaterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="lotNum!= null and lotNum != ''">
+				AND a.lot_num =#{lotNum}
+			</if>
+			<if test="dataFlag!= null and dataFlag != ''">
+				AND a.data_flag =#{dataFlag}
+			</if>
+			<if test="isFeed !=null ">
+				AND a.is_feed = #{isFeed}
+			</if>
+			<if test="orderId!= null and orderId != ''">
+				AND a.order_id LIKE CONCAT('${orderId}','%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.order_id DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsyCreater">
+		SELECT 
+			<include refid="tsyCreaterColumns"/>
+		FROM tsy_creater a
+		<include refid="tsyCreaterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tsy_creater(
+			order_id,
+			type,
+			cus_no,
+			cus_model,
+			create_model,
+			order_sum,
+			lot_num,
+			order_date,
+			delive_date,
+			moulde_flag,
+			looker_flag,
+			tester_flag,
+			cus_require,
+			is_feed,
+			data_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{orderId},
+			#{type},
+			#{cusNo},
+			#{cusModel},
+			#{createModel},
+			#{orderSum},
+			#{lotNum},
+			#{orderDate},
+			#{deliveDate},
+			#{mouldeFlag},
+			#{lookerFlag},
+			#{testerFlag},
+			#{cusRequire},
+			#{isFeed},
+			#{dataFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tsy_creater SET 	
+			order_id = #{orderId},
+			type = #{type},
+			cus_no = #{cusNo},
+			cus_model = #{cusModel},
+			create_model = #{createModel},
+			order_sum = #{orderSum},
+			lot_num = #{lotNum},
+			order_date = #{orderDate},
+			delive_date = #{deliveDate},
+			moulde_flag = #{mouldeFlag},
+			looker_flag = #{lookerFlag},
+			tester_flag = #{testerFlag},
+			cus_require = #{cusRequire},
+			is_feed = #{isFeed},
+			data_flag = #{dataFlag},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE tsy_creater SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

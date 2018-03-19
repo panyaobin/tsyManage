@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.tsy.dao.TsyProductInfoDao">
+    
+	<sql id="tsyProductInfoColumns">
+		a.id AS "id",
+		a.create_model AS "createModel",
+		a.leng AS "leng",
+		a.wide AS "wide",
+		a.set_pcs AS "setPcs",
+		a.pnl_set AS "pnlSet",
+		a.ct_count AS "ctCount",
+		a.cb_count AS "cbCount",
+		a.lo_count AS "loCount",
+		a.lt_count AS "ltCount",
+		a.base_type AS "baseType",
+		a.pack_type AS "packType",
+		a.film_type AS "filmType",
+		a.is_hot AS "isHot",
+		a.ct_film AS "ctFilm",
+		a.cb_film AS "cbFilm",
+		a.ft_count AS "ftCount",
+		a.fb_count AS "fbCount",
+		a.is_mask AS "isMask",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tsyProductInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="TsyProductInfo">
+		SELECT 
+			<include refid="tsyProductInfoColumns"/>
+		FROM tsy_product_info a
+		<include refid="tsyProductInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsyProductInfo">
+		SELECT 
+			<include refid="tsyProductInfoColumns"/>
+		FROM tsy_product_info a
+		<include refid="tsyProductInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="createModel!= null and createModel != ''">
+				AND a.create_model =#{createModel}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsyProductInfo">
+		SELECT 
+			<include refid="tsyProductInfoColumns"/>
+		FROM tsy_product_info a
+		<include refid="tsyProductInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tsy_product_info(
+			create_model,
+			leng,
+			wide,
+			set_pcs,
+			pnl_set,
+			ct_count,
+			cb_count,
+			lo_count,
+			lt_count,
+			base_type,
+			pack_type,
+			film_type,
+			is_hot,
+			ct_film,
+			cb_film,
+			ft_count,
+			fb_count,
+			is_mask,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{createModel},
+			#{leng},
+			#{wide},
+			#{setPcs},
+			#{pnlSet},
+			#{ctCount},
+			#{cbCount},
+			#{loCount},
+			#{ltCount},
+			#{baseType},
+			#{packType},
+			#{filmType},
+			#{isHot},
+			#{ctFilm},
+			#{cbFilm},
+			#{ftCount},
+			#{fbCount},
+			#{isMask},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tsy_product_info SET 	
+			create_model = #{createModel},
+			leng = #{leng},
+			wide = #{wide},
+			set_pcs = #{setPcs},
+			pnl_set = #{pnlSet},
+			ct_count = #{ctCount},
+			cb_count = #{cbCount},
+			lo_count = #{loCount},
+			lt_count = #{ltCount},
+			is_hot = #{isHot},
+			ct_film = #{ctFilm},
+			cb_film = #{cbFilm},
+			ft_count = #{ftCount},
+			fb_count = #{fbCount},
+			is_mask = #{isMask},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE tsy_product_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

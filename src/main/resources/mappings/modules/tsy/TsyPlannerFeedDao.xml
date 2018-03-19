@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.tsy.dao.TsyPlannerFeedDao">
+    
+	<sql id="tsyPlannerFeedColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.feed_date AS "feedDate",
+		a.cus_no AS "cusNo",
+		a.create_model AS "createModel",
+		a.lot_num AS "lotNum",
+		a.leng AS "leng",
+		a.wide AS "wide",
+		a.pcs AS "pcs",
+		a.order_sum AS "orderSum",
+		a.zuank_sum AS "zuankSum",
+		a.line_sum AS "lineSum",
+		a.tiehe_sum AS "tieheSum",
+		a.gold_sum AS "goldSum",
+		a.smt_sum AS "smtSum",
+		a.feed_sum AS "feedSum",
+		a.feed_area AS "feedArea",
+		a.delivered_sum AS "deliveredSum",
+		a.undelivered_sum AS "undeliveredSum",
+		a.online_sum AS "onlineSum",
+		a.online_area AS "onlineArea",
+		a.is_clear AS "isClear",
+		a.tag_operate AS "tagOperate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="tsyPlannerFeedJoins">
+	</sql>
+    
+	<select id="get" resultType="TsyPlannerFeed">
+		SELECT 
+			<include refid="tsyPlannerFeedColumns"/>
+		FROM tsy_planner_feed a
+		<include refid="tsyPlannerFeedJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TsyPlannerFeed">
+		SELECT 
+			<include refid="tsyPlannerFeedColumns"/>
+		FROM tsy_planner_feed a
+		<include refid="tsyPlannerFeedJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TsyPlannerFeed">
+		SELECT 
+			<include refid="tsyPlannerFeedColumns"/>
+		FROM tsy_planner_feed a
+		<include refid="tsyPlannerFeedJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tsy_planner_feed(
+			order_id,
+			feed_date,
+			cus_no,
+			create_model,
+			lot_num,
+			leng,
+			wide,
+			pcs,
+			order_sum,
+			zuank_sum,
+			line_sum,
+			tiehe_sum,
+			gold_sum,
+			smt_sum,
+			feed_sum,
+			feed_area,
+			delivered_sum,
+			undelivered_sum,
+			online_sum,
+			online_area,
+			is_clear,
+			tag_operate,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{orderId},
+			#{feedDate},
+			#{cusNo},
+			#{createModel},
+			#{lotNum},
+			#{leng},
+			#{wide},
+			#{pcs},
+			#{orderSum},
+			#{zuankSum},
+			#{lineSum},
+			#{tieheSum},
+			#{goldSum},
+			#{smtSum},
+			#{feedSum},
+			#{feedArea},
+			#{deliveredSum},
+			#{undeliveredSum},
+			#{onlineSum},
+			#{onlineArea},
+			#{isClear},
+			#{tagOperate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tsy_planner_feed SET 	
+			order_id = #{orderId},
+			feed_date = #{feedDate},
+			cus_no = #{cusNo},
+			create_model = #{createModel},
+			lot_num = #{lotNum},
+			leng = #{leng},
+			wide = #{wide},
+			pcs = #{pcs},
+			order_sum = #{orderSum},
+			zuank_sum = #{zuankSum},
+			line_sum = #{lineSum},
+			tiehe_sum = #{tieheSum},
+			gold_sum = #{goldSum},
+			smt_sum = #{smtSum},
+			feed_sum = #{feedSum},
+			feed_area = #{feedArea},
+			delivered_sum = #{deliveredSum},
+			undelivered_sum = #{undeliveredSum},
+			online_sum = #{onlineSum},
+			online_area = #{onlineArea},
+			is_clear = #{isClear},
+			tag_operate = #{tagOperate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE tsy_planner_feed SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
